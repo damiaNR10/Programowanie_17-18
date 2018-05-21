@@ -7,6 +7,7 @@ public class BlockConnection : MonoBehaviour {
 
     List<Block> ConnectedBlocks = new List<Block>();
 
+    private BlockColor? CurrentColor;
 	private Board Board;
 	private LineRenderer LineRenderer;
 
@@ -30,7 +31,17 @@ public class BlockConnection : MonoBehaviour {
     {
 		if (!Input.GetMouseButton(0))
             return;
+
         if (ConnectedBlocks.Contains(block))
+            return;
+
+        if (!CurrentColor.HasValue)
+            CurrentColor = block.Color;
+
+        if (CurrentColor != block.Color)
+            return;
+
+        if (ConnectedBlocks.Count() >= 1 && !ConnectedBlocks.Last().IsNeighbour(block))
             return;
 
         block.IsConnected = true;
@@ -45,9 +56,14 @@ public class BlockConnection : MonoBehaviour {
         ConnectedBlocks
             .ForEach(block => block.IsConnected = false);
 
-        ConnectedBlocks.Clear();
-        
+        ConnectedBlocks
+            .ForEach(block => block.ResetColor());
 
+
+
+        ConnectedBlocks.Clear();
+
+        CurrentColor = null;
 		RefreshConnector();
     }
 	private void RefreshConnector()
