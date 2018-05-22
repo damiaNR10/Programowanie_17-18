@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 public class BlockConnection : MonoBehaviour {
 
@@ -10,6 +11,8 @@ public class BlockConnection : MonoBehaviour {
     private BlockColor? CurrentColor;
 	private Board Board;
 	private LineRenderer LineRenderer;
+
+	public event Action<int> OnConnection; // informuje o ilości połączonych bloków
 
 	void Awake ()
 	{
@@ -56,12 +59,16 @@ public class BlockConnection : MonoBehaviour {
         ConnectedBlocks
             .ForEach(block => block.IsConnected = false);
 
-        ConnectedBlocks
-            .ForEach(block => block.ResetColor());
+		if (ConnectedBlocks.Count >= 3) 
+		{
+			if (OnConnection != null)
+				OnConnection.Invoke (ConnectedBlocks.Count);
+			Board.RemoveBlocks (ConnectedBlocks); // usuwanie poszczególnych bloków
+			Board.RefreshBlocks (); // przesunięcie poszczególnych elementów na planszy
+		}
 
-
-
-        ConnectedBlocks.Clear();
+		
+		ConnectedBlocks.Clear ();
 
         CurrentColor = null;
 		RefreshConnector();

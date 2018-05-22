@@ -84,6 +84,13 @@ public class Block : MonoBehaviour
         IsConnected = false;
     }
 
+	public void PlaceOnTargetPosition()
+	{
+		transform.localPosition = TargetPosition;
+		transform.localScale = Vector3.zero;
+		SpriteRenderer.color = new Color(1f, 1f, 1f, 0f);
+	}
+
     public static BlockColor GetRandomColor()
     {
         var values = System.Enum.GetValues(typeof(BlockColor));

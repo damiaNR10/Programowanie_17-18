@@ -26,7 +26,8 @@ public class Board : MonoBehaviour {
    public  Block[,] Blocks { get; private set; }
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		GenerateBoard ();
 	}
 	
@@ -66,6 +67,36 @@ public class Board : MonoBehaviour {
 			x - Width / 2f + 0.5f,
 			y - Height / 2f + 0.5f);
 		return basePosition * GridSize;
+	}
+	public void RemoveBlocks(List<Block> connectedBlocks)
+	{
+		connectedBlocks.ForEach (b => Blocks [b.X, b.Y] = null); // odnajdujemy wszystkie bloki > resetujemy i usuwamy
+		connectedBlocks.ForEach (b => Destroy(b.gameObject)); // usuwamy dany block
+	}
+	public void RefreshBlocks() // spadające bloki w puste miejsca
+	{
+		for (int x = 0; x < Width; x++) // iterujemy po szerokości planszy
+		{
+			int h = 0;
+			for(int y=0; y < Height; y++) // iterujemy po wysokości planszy
+			{
+				if (Blocks [x, y] == null) // sprawdzamy czy bloki nie są puste
+					continue;
+
+				Blocks[x, h] = Blocks[x, y];
+				Blocks[x, h].Configure(x, h);
+
+				h++;
+			}
+
+			for (int y = h; y < Height; y++) 
+			{
+				Blocks [x, y] = GenerateBlock (x, y);
+				Blocks [x, y].PlaceOnTargetPosition (); // Nowe bloki bojawiają się w miejscach starych (usuniętych) bloków
+			}
+
+				
+		}
 	}
 
 }
