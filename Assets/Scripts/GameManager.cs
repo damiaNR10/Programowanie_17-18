@@ -68,7 +68,14 @@ public class GameManager : MonoBehaviour {
 
         private void OnGameEnded()
         {
-            SceneManager.LoadScene("menu");
+            PlayerPrefs.SetInt(PlayerPrefsConst.LastGameScore, Score);
+
+            var record = PlayerPrefs.GetInt(PlayerPrefsConst.RecordScore, 0);
+
+            if (record > Score)
+                PlayerPrefs.SetInt(PlayerPrefsConst.RecordScore, Score);
+
+            SceneManager.LoadScene(SceneNames.Menu);
         }
 
     private void UpdateScore(int length)
