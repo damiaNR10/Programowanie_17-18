@@ -75,8 +75,8 @@ public class GameManager : MonoBehaviour {
             if (record > Score)
                 PlayerPrefs.SetInt(PlayerPrefsConst.RecordScore, Score);
 
-            SceneManager.LoadScene(SceneNames.Menu);
-        }
+            FindObjectOfType<SceneChanger>().ChangeScene(SceneNames.Menu);
+    }
 
     private void UpdateScore(int length)
     {

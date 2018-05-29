@@ -19,8 +19,9 @@ public class MenuUserInterface : MonoBehaviour {
 
     }
 
-    public void LoadGame()
+    public void LoadGame() // zmiana sceny
     {
+        FindObjectOfType<SceneChanger>().ChangeScene(SceneNames.Game);
         SceneManager.LoadScene(SceneNames.Game);
     }
 
