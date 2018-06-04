@@ -8,7 +8,7 @@ public class Board : MonoBehaviour {
 	GameObject BlockPrefab;
 
 	[SerializeField]
-	[Range(3,8)]
+	[Range(3,8)] //atrybut Range pozwalający limitować wartości w ramach danej zmiennej (nie działa z poziomu kodu), jest stosowany przede wszystkim w ramach inspektora Unity3D
 	int Width = 5;
 
 	[SerializeField]
@@ -35,7 +35,7 @@ public class Board : MonoBehaviour {
 	void Update () {
 		
 	}
-	private void GenerateBoard()
+	private void GenerateBoard() //funkcja generująca wszystkie bloki na planszy
 	{
         Blocks = new Block[Width, Height];
 
@@ -50,7 +50,7 @@ public class Board : MonoBehaviour {
         }
 			
 	}
-	private Block GenerateBlock(int x, int y)
+	private Block GenerateBlock(int x, int y) //funkcja generująca pojedynczy blok na określonych pozycjach
 	{
 		var obj = Instantiate (BlockPrefab);
 		obj.transform.parent = transform;
@@ -61,26 +61,26 @@ public class Board : MonoBehaviour {
         block.Configure(x, y);
         return block;
 	}
-	public Vector2 GetBlockPosition(int x, int y)
+	public Vector2 GetBlockPosition(int x, int y) //funkcja określająca położenie na podstawie koordynatów
 	{
 		var basePosition = new Vector2 (
 			x - Width / 2f + 0.5f,
 			y - Height / 2f + 0.5f);
 		return basePosition * GridSize;
 	}
-	public void RemoveBlocks(List<Block> connectedBlocks)
+	public void RemoveBlocks(List<Block> connectedBlocks) //funkcja usuwająca wszystkie zadane bloki
 	{
 		connectedBlocks.ForEach (b => Blocks [b.X, b.Y] = null); // odnajdujemy wszystkie bloki > resetujemy i usuwamy
 		connectedBlocks.ForEach (b => Destroy(b.gameObject)); // usuwamy dany block
 	}
-	public void RefreshBlocks() // spadające bloki w puste miejsca
+	public void RefreshBlocks() // funkcja odpowiedzialna za: usunięcie pustych miejsc w ramach planszy, przesunięcie wszystkich obiektów w dół, tak aby puste miejsca już nie występowały i utworzenie nowych obiektów w ramach pustych przestrzeni na górze planszy
 	{
-		for (int x = 0; x < Width; x++) // iterujemy po szerokości planszy
+		for (int x = 0; x < Width; x++) // iteracja po szerokości planszy
 		{
 			int h = 0;
-			for(int y=0; y < Height; y++) // iterujemy po wysokości planszy
+			for(int y=0; y < Height; y++) // iteracja po wysokości planszy
 			{
-				if (Blocks [x, y] == null) // sprawdzamy czy bloki nie są puste
+				if (Blocks [x, y] == null) // sprawdzanie czy bloki nie są puste
 					continue;
 
 				Blocks[x, h] = Blocks[x, y];

@@ -7,7 +7,7 @@ using UnityEngine;
 public enum TextDirection { Left, Middle, Right}
 
 public class Number : MonoBehaviour {
-
+    //skrypt pobiera łacznie 10 grafik, reprezentujących cyfry 0-9
     [SerializeField]
     //pole przechowujące listę spritów
     Sprite[] Sprites;
@@ -18,6 +18,7 @@ public class Number : MonoBehaviour {
     [SerializeField]
     TextDirection TextDirection;
 
+     //wartość, która powinna zostać wyświetlana
     private int _value = 0;
     public int Value {
         get { return _value; }
@@ -31,14 +32,14 @@ public class Number : MonoBehaviour {
 
     private void RefreshNumber() //funkcja odświeżająca interfejs
     {
-        RemoveDigits();
+        RemoveDigits(); // usunięcie wszystkich obiektów jakie składały się na daną aktualnie wyświetlaną liczbę
 
         var digits = Value
             .ToString()
             .Select(c => int.Parse(c.ToString()))
-            .ToArray();
+            .ToArray(); // dzielenie podanej wartości na poszczególne cyfry
 
-        for (int i = 0; i < digits.Count(); i++)
+        for (int i = 0; i < digits.Count(); i++) // wyświetlenie cyfr
         {
             var position = CalculatePosition(i, digits.Count());
             var digit = CreateDigit(position, digits[i]);
@@ -46,13 +47,13 @@ public class Number : MonoBehaviour {
         }
     }
 
-    private void RemoveDigits()
+    private void RemoveDigits() //usunięcie liczby
     {
         DigitsObject.ForEach(number => Destroy(number));
         DigitsObject.Clear();
     }
 
-    private Vector3 CalculatePosition(int index, int numberOfDigits)
+    private Vector3 CalculatePosition(int index, int numberOfDigits) // obliczanie pozycji danej cyfry, obliczana na podstawie 3 wartości: index danej wartości w ramach całej liczby, łączna liczba cyfr w wyświetlanej liczbie, sposoby wyświetlania (lewa, prawa, środek)
     {
         float result = 0;
 
@@ -67,16 +68,16 @@ public class Number : MonoBehaviour {
 
     }
 
-    private GameObject CreateDigit(Vector3 position, int value)
+    private GameObject CreateDigit(Vector3 position, int value) 
     {
-        var digit = new GameObject();
-        digit.transform.parent = transform;
-        digit.transform.localPosition = position;
+        var digit = new GameObject(); // tworzy nowy obiekt
+        digit.transform.parent = transform; 
+        digit.transform.localPosition = position; // ustawia stworzonemu obiektowi pozycję
 
         var sprite = Sprites[value];
-        digit.AddComponent<SpriteRenderer>().sprite = sprite;
+        digit.AddComponent<SpriteRenderer>().sprite = sprite; // ustawienie odopwiedniego Sprite'u (wyświetlanego obrazka)
 
-        return digit;
+        return digit; // zwrócenie tego obiektu po to, aby zapisać go w tablicy cyfr
     }
 
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//klasa zarządzająca wszystkimi najważniejszymi rzeczami w ramach gry
 public class GameManager : MonoBehaviour {
 
 
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour {
     float GameDuration = 60f; // Czas gry (domyślnie 60s)
 
     private float remainingTime;
-    public float RemainingTime
+    public float RemainingTime  //odliczanie czasu rozgrywki
     {
         get { return remainingTime;  }
         set
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour {
     public event Action<float> OnRemainingTimeChanged;
 
     private int score;
-    public int Score
+    public int Score //zliczanie punktów
     {
         get { return score; }
         set
@@ -51,13 +52,13 @@ public class GameManager : MonoBehaviour {
         RemainingTime = GameDuration;
         StartCoroutine(TimeCounterCoroutine());
 
-        FindObjectOfType<BlockConnection>().OnConnection += UpdateScore;
+        FindObjectOfType<BlockConnection>().OnConnection += UpdateScore; //klasa GameManager subskrybuje zdarzenie OnConnection w ramach klasy BlockConnection; dzięki temu połączeniu jest w stanie trackować wszystkie działania gracza, oraz odpowiednio naliczać punkty
 
     }
 
 
 
-    IEnumerator TimeCounterCoroutine()
+    IEnumerator TimeCounterCoroutine() //korutyna (współprogram) wywoływana w ramach funkcji start, umożliwająca zliczanie czasu
         {
             while(true)
             {
@@ -66,19 +67,19 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        private void OnGameEnded()
+        private void OnGameEnded() // funkcja odpowiedzialna za zapisanie stanu gry i przejście do nowej sceny
         {
-            PlayerPrefs.SetInt(PlayerPrefsConst.LastGameScore, Score);
+            PlayerPrefs.SetInt(PlayerPrefsConst.LastGameScore, Score); // zapisywanie poszczególnych wartości w ramach klasy PlayerPrefs do osobnej klasy
 
             var record = PlayerPrefs.GetInt(PlayerPrefsConst.RecordScore, 0);
 
-            if (record > Score)
+            if (record < Score)
                 PlayerPrefs.SetInt(PlayerPrefsConst.RecordScore, Score);
 
-            FindObjectOfType<SceneChanger>().ChangeScene(SceneNames.Menu);
+            FindObjectOfType<SceneChanger>().ChangeScene(SceneNames.Menu); // zapisywanie poszczególnych scen do osobnej klasy
     }
 
-    private void UpdateScore(int length)
+    private void UpdateScore(int length) // naliczanie punktów: (ilośc połączonych elementów)^2
     {
         Score += length * length;
     }

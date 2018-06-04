@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum BlockColor { Red, Green, Blue, Yellow, Magenta, Gray}
+public enum BlockColor { Red, Green, Blue, Yellow, Magenta, Gray} //deklaracja możliwych kolorów dla bloków 
 
 [System.Serializable]
-class BlockType
+class BlockType //klasa służąca do mapowania wartości pola enumerowanego BlockColor na odpowiedni Sprite
 {
     public BlockColor Color;
     public Sprite Sprite;
@@ -18,15 +18,15 @@ public class Block : MonoBehaviour
     [SerializeField]
     BlockType[] BlockTypes;
 
-    public int X { get; private set; }
-    public int Y { get; private set; }
+    public int X { get; private set; } 
+    public int Y { get; private set; } //położenie bloków na planszy
 
     public BlockColor Color { get; private set; }
 
-    public bool IsConnected;
+    public bool IsConnected; //czy blok jest "połączony" (jest w składzie ścieżki)
 
     private Vector3 TargetPosition;
-    private Board Board;
+    private Board Board; //referencje do klas Board i BlockConnection
     private BlockConnection BlockConnection;
 
     private SpriteRenderer SpriteRenderer;
@@ -44,7 +44,7 @@ public class Block : MonoBehaviour
     void Start()
     {
 
-        Color = GetRandomColor();
+        Color = GetRandomColor(); //losowany jest jeden z kolorów i przypisany zostaje danemu blokowi
         SetSprite();
 
     }
@@ -52,7 +52,8 @@ public class Block : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdatePosition();
+        //z każdą klatkągry następuje aktualizacja pozycji, wielkości i koloru bloku
+        UpdatePosition(); 
         UpdateScale();
         UpdateColor();
     }
@@ -64,7 +65,7 @@ public class Block : MonoBehaviour
 
     private void UpdateScale()
     {
-        var targetScale = IsConnected ? 0.8f : 1f;
+        var targetScale = IsConnected ? 0.8f : 1f; //decyzja na temat skali i Coloru (poniżej) podejmowana zostaje na podstawie tego czy dany blok jest połączony z innymi
         targetScale *= Board.BlockSize;
         transform.localScale = Vector3.Lerp(transform.localScale, targetScale * Vector3.one, Time.deltaTime * 5f);
     }
@@ -75,7 +76,7 @@ public class Block : MonoBehaviour
         SpriteRenderer.color = UnityEngine.Color.Lerp(SpriteRenderer.color, targetColor, Time.deltaTime * 5f);
     }
 
-    public void Configure(int x, int y)
+    public void Configure(int x, int y) //funkcja odpowiedzialna za przypisanie poszczególnych właściwości
     {
         X = x;
         Y = y;
@@ -84,7 +85,7 @@ public class Block : MonoBehaviour
         IsConnected = false;
     }
 
-	public void PlaceOnTargetPosition()
+	public void PlaceOnTargetPosition() //funkcja służąca do ustawienia bloku na określonej pozycji z pominięciem animacji
 	{
 		transform.localPosition = TargetPosition;
 		transform.localScale = Vector3.zero;
@@ -111,9 +112,9 @@ public class Block : MonoBehaviour
         SetSprite();
     }
 
-    public bool IsNeighbour(Block other)
+    public bool IsNeighbour(Block other) //funkcja pozwalająca określić czy dane 2 bloki są ze sobą sąsiadami; użyta zostaje wartośc bezwzględna
     {
-        if (Mathf.Abs(X - other.X) > 1f)
+        if (Mathf.Abs(X - other.X) > 1f) 
             return false;
 
         if (Mathf.Abs(Y - other.Y) > 1f)
