@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+/// <summary>
+///  Klasa odpowiedzialna za dodanie efektu dotyczącego zmiany sceny (aktualny ekran staje się biały, natomiast po załadowaniu sceny następuje płynne przejście na właściwy obraz)
+/// </summary>
 [RequireComponent(typeof(Canvas))] // płynne przejście okien
 public class SceneChanger : MonoBehaviour
-{// klasa pozwalająca na dodanie efektu dotyczącego zmiany sceny (aktualny ekran staje się biały, natomiast po załadowaniu sceny następuje płynne przejście na właściwy obraz)
+{
     [SerializeField]
     float FadeDuration = 1f;
 
     Image Blend;
-
+    /// <summary>
+    /// Gdy załaduje się nowa scena zostanie uruchomiona korutyna FadeInCoroutine, której działanie jest analogiczne do działania FadeOutCoroutine z tą różnicą, że zmieniony zostaje poziom przezroczystości z wartości 1 do wartości 0
+    /// </summary>
     void Start()
     {
         Blend = CreateBlend();
-        StartCoroutine(FadeInCoroutine()); //gdy załaduje się nowa scena zostanie uruchomiona korutyna FadeInCoroutine, której działanie jest analogiczne do działania FadeOutCoroutine z tą różnicą, że zmieniony zostaje poziom przezroczystości z wartości 1 do wartości 0
+        StartCoroutine(FadeInCoroutine()); 
     }
-
-    Image CreateBlend() // tworzenie blendy, czyli obiektu który będzie zajmował całą przestrzeń na ekranie i będzie odpowiedzialny za zmianę swojego stopnia przezroczystości
+    /// <summary>
+    /// tworzenie blendy, czyli obiektu który będzie zajmował całą przestrzeń na ekranie i będzie odpowiedzialny za zmianę swojego stopnia przezroczystości
+    /// </summary>
+    Image CreateBlend() 
     {
         var obj = new GameObject();
         obj.transform.parent = transform;
@@ -38,12 +44,13 @@ public class SceneChanger : MonoBehaviour
 
         return image;
     }
-
-    public void ChangeScene(string name) //udostępnienie publicznej funkcji ChangeScene wraz z argumentem czyli nazwą sceny do załadowania, która odpowiedzialna jest za uruchomienie korutyny FadeOutCoroutine
+    /// <summary>
+    /// udostępnienie publicznej funkcji ChangeScene wraz z argumentem czyli nazwą sceny do załadowania, która odpowiedzialna jest za uruchomienie korutyny FadeOutCoroutine
+    /// </summary>
+    public void ChangeScene(string name)
     {
         StartCoroutine(FadeOutCoroutine(name));
     }
-
     IEnumerator FadeInCoroutine()
     {
         Blend.gameObject.SetActive(true);
@@ -56,7 +63,11 @@ public class SceneChanger : MonoBehaviour
 
         Blend.gameObject.SetActive(false);
     }
-
+    /// <summary>
+    /// Przezroczystosć
+    /// </summary>
+    /// <param name="sceneName">Zmiana sceny</param>
+    /// <returns></returns>
     IEnumerator FadeOutCoroutine(string sceneName)
     {
 

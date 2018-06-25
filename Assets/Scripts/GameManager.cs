@@ -4,15 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//klasa zarządzająca wszystkimi najważniejszymi rzeczami w ramach gry
+/// <summary>
+/// Główna klasa, która steruje grą oraz jej wszystkimi funkcjonalnościami
+/// </summary>
 public class GameManager : MonoBehaviour {
 
-
+    /// <summary>
+    /// Czas gry
+    /// </summary>
     [SerializeField]
     float GameDuration = 60f; // Czas gry (domyślnie 60s)
 
     private float remainingTime;
-    public float RemainingTime  //odliczanie czasu rozgrywki
+    /// <summary>
+    /// odliczanie czasu rozgrywki
+    /// </summary>
+    public float RemainingTime  
     {
         get { return remainingTime;  }
         set
@@ -29,9 +36,11 @@ public class GameManager : MonoBehaviour {
 
 
     public event Action<float> OnRemainingTimeChanged;
-
+    /// <summary>
+    /// zliczanie punktów
+    /// </summary>
     private int score;
-    public int Score //zliczanie punktów
+    public int Score 
     {
         get { return score; }
         set
@@ -44,7 +53,9 @@ public class GameManager : MonoBehaviour {
         public event Action<int> OnScoreChanged;
 
 
-    // Use this for initialization
+    /// <summary>
+    /// Używane do inicjalzacji
+    /// </summary>
     void Start () {
 
         Score = 0;
@@ -57,8 +68,10 @@ public class GameManager : MonoBehaviour {
     }
 
 
-
-    IEnumerator TimeCounterCoroutine() //korutyna (współprogram) wywoływana w ramach funkcji start, umożliwająca zliczanie czasu
+    /// <summary>
+    /// korutyna (współprogram) wywoływana w ramach funkcji start, umożliwająca zliczanie czasu
+    /// </summary>
+    IEnumerator TimeCounterCoroutine() 
         {
             while(true)
             {
@@ -66,8 +79,10 @@ public class GameManager : MonoBehaviour {
                 yield return new WaitForSeconds(1f);
             }
         }
-
-        private void OnGameEnded() // funkcja odpowiedzialna za zapisanie stanu gry i przejście do nowej sceny
+    /// <summary>
+    /// funkcja odpowiedzialna za zapisanie stanu gry i przejście do nowej sceny
+    /// </summary>
+    private void OnGameEnded() 
         {
             PlayerPrefs.SetInt(PlayerPrefsConst.LastGameScore, Score); // zapisywanie poszczególnych wartości w ramach klasy PlayerPrefs do osobnej klasy
 
@@ -78,8 +93,10 @@ public class GameManager : MonoBehaviour {
 
             FindObjectOfType<SceneChanger>().ChangeScene(SceneNames.Menu); // zapisywanie poszczególnych scen do osobnej klasy
     }
-
-    private void UpdateScore(int length) // naliczanie punktów: (ilośc połączonych elementów)^2
+    /// <summary>
+    /// naliczanie punktów: (ilośc połączonych elementów)^2
+    /// </summary>
+    private void UpdateScore(int length) 
     {
         Score += length * length;
     }

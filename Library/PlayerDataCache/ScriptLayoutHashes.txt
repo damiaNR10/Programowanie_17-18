@@ -1,6 +1,6 @@
 WindowsStandalone
 PlayerPath?
-C:/Users/Patryk/Desktop/gra/gra.exe
+C:/Users/Damian/Desktop/PUMPRO/PUMPRO.exe
 SceneListBegin?
 Assets/Scenes/menu.unity
 Assets/Scenes/game.unity

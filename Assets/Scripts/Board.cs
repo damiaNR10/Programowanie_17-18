@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Klasa odpowiedzialna za generowanie planszy na której umieszczone zostaną bloki
+/// </summary>
 public class Board : MonoBehaviour {
 	
 	[SerializeField]
@@ -25,17 +28,24 @@ public class Board : MonoBehaviour {
 
    public  Block[,] Blocks { get; private set; }
 
-	// Use this for initialization
+	/// <summary>
+    /// Inicjalizacja
+    /// </summary>
 	void Start () 
 	{
 		GenerateBoard ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    /// <summary>
+    /// Aktualizacja jest wywoływana raz na klatkę, z każdą klatką gry następuje aktualizacja pozycji, wielkości i koloru bloku
+    /// </summary>
+    void Update () {
 		
 	}
-	private void GenerateBoard() //funkcja generująca wszystkie bloki na planszy
+    /// <summary>
+    /// funkcja generująca wszystkie bloki na planszy
+    /// </summary>
+	private void GenerateBoard() 
 	{
         Blocks = new Block[Width, Height];
 
@@ -50,7 +60,10 @@ public class Board : MonoBehaviour {
         }
 			
 	}
-	private Block GenerateBlock(int x, int y) //funkcja generująca pojedynczy blok na określonych pozycjach
+    /// <summary>
+    /// Funkcja generująca pojedynczy blok na określonych pozycjach
+    /// </summary>
+	private Block GenerateBlock(int x, int y) 
 	{
 		var obj = Instantiate (BlockPrefab);
 		obj.transform.parent = transform;
@@ -61,19 +74,28 @@ public class Board : MonoBehaviour {
         block.Configure(x, y);
         return block;
 	}
-	public Vector2 GetBlockPosition(int x, int y) //funkcja określająca położenie na podstawie koordynatów
+    /// <summary>
+    /// Funkcja określająca położenie na podstawie koordynatów
+    /// </summary>
+	public Vector2 GetBlockPosition(int x, int y) 
 	{
 		var basePosition = new Vector2 (
 			x - Width / 2f + 0.5f,
 			y - Height / 2f + 0.5f);
 		return basePosition * GridSize;
 	}
-	public void RemoveBlocks(List<Block> connectedBlocks) //funkcja usuwająca wszystkie zadane bloki
+    /// <summary>
+    /// funkcja usuwająca wszystkie zadane bloki
+    /// </summary>
+	public void RemoveBlocks(List<Block> connectedBlocks) 
 	{
 		connectedBlocks.ForEach (b => Blocks [b.X, b.Y] = null); // odnajdujemy wszystkie bloki > resetujemy i usuwamy
 		connectedBlocks.ForEach (b => Destroy(b.gameObject)); // usuwamy dany block
 	}
-	public void RefreshBlocks() // funkcja odpowiedzialna za: usunięcie pustych miejsc w ramach planszy, przesunięcie wszystkich obiektów w dół, tak aby puste miejsca już nie występowały i utworzenie nowych obiektów w ramach pustych przestrzeni na górze planszy
+    /// <summary>
+    /// funkcja odpowiedzialna za: usunięcie pustych miejsc w ramach planszy, przesunięcie wszystkich obiektów w dół, tak aby puste miejsca już nie występowały i utworzenie nowych obiektów w ramach pustych przestrzeni na górze planszy
+    /// </summary>
+	public void RefreshBlocks() 
 	{
 		for (int x = 0; x < Width; x++) // iteracja po szerokości planszy
 		{

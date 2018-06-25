@@ -2,24 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+/// <summary>
+/// Klasa odpowiedzialna za menu główne
+/// </summary>
 public class MenuUserInterface : MonoBehaviour {
 
-    //dwa pola typu number pozwalające wyświetlić aktualny wynik i aktualny rekord
+    /// <summary>
+    /// Aktyalny zdobyty wynik w grze
+    /// </summary>
     [SerializeField]
     Number LastGameScore;
-
+    /// <summary>
+    /// Rekord
+    /// </summary>
     [SerializeField]
     Number RecordScore;
 
-    // Use this for initialization
+    /// <summary>
+    /// Inicjalizacja
+    /// </summary>
     void Start () {
         LastGameScore.Value = PlayerPrefs.GetInt(PlayerPrefsConst.LastGameScore, 0);
         RecordScore.Value = PlayerPrefs.GetInt(PlayerPrefsConst.RecordScore, 0);
 
     }
-
-    public void LoadGame() // zmiana sceny
+    /// <summary>
+    /// Zmiana sceny
+    /// </summary>
+    public void LoadGame() 
     {
         FindObjectOfType<SceneChanger>().ChangeScene(SceneNames.Game);
         SceneManager.LoadScene(SceneNames.Game);

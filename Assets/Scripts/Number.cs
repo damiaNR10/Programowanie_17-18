@@ -5,7 +5,9 @@ using System.Linq;
 using UnityEngine;
 
 public enum TextDirection { Left, Middle, Right}
-
+/// <summary>
+/// Klasa odpowiedzialna za, wyświetlani w postaci liczbowej (0-9) czasu rozgrywki oraz ilość zdobytych punktów.
+/// </summary>
 public class Number : MonoBehaviour {
     //skrypt pobiera łacznie 10 grafik, reprezentujących cyfry 0-9
     [SerializeField]
@@ -29,8 +31,10 @@ public class Number : MonoBehaviour {
     }
 
     List<GameObject> DigitsObject = new List<GameObject>();
-
-    private void RefreshNumber() //funkcja odświeżająca interfejs
+    /// <summary>
+    /// funkcja odświeżająca interfejs
+    /// </summary>
+    private void RefreshNumber() 
     {
         RemoveDigits(); // usunięcie wszystkich obiektów jakie składały się na daną aktualnie wyświetlaną liczbę
 
@@ -46,14 +50,19 @@ public class Number : MonoBehaviour {
             DigitsObject.Add(digit);
         }
     }
-
-    private void RemoveDigits() //usunięcie liczby
+    /// <summary>
+    /// usunięcie liczby
+    /// </summary>
+    private void RemoveDigits() 
     {
         DigitsObject.ForEach(number => Destroy(number));
         DigitsObject.Clear();
     }
 
-    private Vector3 CalculatePosition(int index, int numberOfDigits) // obliczanie pozycji danej cyfry, obliczana na podstawie 3 wartości: index danej wartości w ramach całej liczby, łączna liczba cyfr w wyświetlanej liczbie, sposoby wyświetlania (lewa, prawa, środek)
+    /// <summary>
+    /// obliczanie pozycji danej cyfry, obliczana na podstawie 3 wartości: index danej wartości w ramach całej liczby, łączna liczba cyfr w wyświetlanej liczbie, sposoby wyświetlania (lewa, prawa, środek)
+    /// </summary>
+    private Vector3 CalculatePosition(int index, int numberOfDigits) 
     {
         float result = 0;
 
@@ -67,17 +76,22 @@ public class Number : MonoBehaviour {
         return Vector3.right * result * GridSize;
 
     }
-
+    /// <summary>
+    /// Nowe obiekty
+    /// </summary>
+    /// <param name="position">Ustawia stworzonemu obektowi pozycję</param>
+    /// <param name="value">ustawienie odopwiedniego Sprite'u (wyświetlanego obrazka)</param>
+    /// <returns>Zwrócenie obektu po to,aby zapisać go w tablicy cyfr</returns>
     private GameObject CreateDigit(Vector3 position, int value) 
     {
         var digit = new GameObject(); // tworzy nowy obiekt
         digit.transform.parent = transform; 
-        digit.transform.localPosition = position; // ustawia stworzonemu obiektowi pozycję
+        digit.transform.localPosition = position;
 
         var sprite = Sprites[value];
-        digit.AddComponent<SpriteRenderer>().sprite = sprite; // ustawienie odopwiedniego Sprite'u (wyświetlanego obrazka)
+        digit.AddComponent<SpriteRenderer>().sprite = sprite; 
 
-        return digit; // zwrócenie tego obiektu po to, aby zapisać go w tablicy cyfr
+        return digit;
     }
 
 }

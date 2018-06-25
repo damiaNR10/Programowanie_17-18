@@ -4,15 +4,25 @@ using System.Linq;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// Klasa odpowiedzialna za łączenie bloków
+/// </summary>
+
 public class BlockConnection : MonoBehaviour {
-
-    List<Block> ConnectedBlocks = new List<Block>(); // lista aktualnie połączonych bloków
-
-    private BlockColor? CurrentColor; // aktualnie używany kolor
+    /// <summary>
+    /// lista aktualnie połączonych bloków
+    /// </summary>
+    List<Block> ConnectedBlocks = new List<Block>();
+    /// <summary>
+    /// aktualnie używany kolor
+    /// </summary>
+    private BlockColor? CurrentColor; 
 	private Board Board;
 	private LineRenderer LineRenderer;
-
-	public event Action<int> OnConnection; // informuje o ilości połączonych bloków
+    /// <summary>
+    /// informuje o ilości połączonych bloków
+    /// </summary>
+	public event Action<int> OnConnection; 
 
 	void Awake ()
 	{
@@ -23,14 +33,15 @@ public class BlockConnection : MonoBehaviour {
     void Start() {
 
     }
-		
     void Update() {
 		if (Input.GetMouseButtonUp (0))
 			FinishConnection ();
     }
-		
 
-    public void Connect(Block block) // funkcja odpowiedzialna za łączenie poszczególnych elementów planszy
+    /// <summary>
+    ///  funkcja odpowiedzialna za łączenie poszczególnych elementów planszy
+    /// </summary>
+    public void Connect(Block block)
     {
 		if (!Input.GetMouseButton(0))
             return; // sprawdzenie czy naciśnięty jest LPM, lub (w wersji mobilnej) czy gracz dotyka ekranu
@@ -52,8 +63,10 @@ public class BlockConnection : MonoBehaviour {
 
 		RefreshConnector();
     }
-
-    private void FinishConnection() //funkcja wyświetlana w momencie, gdy użytkownik przestawał dotykać ekran
+    /// <summary>
+    /// funkcja wyświetlana w momencie, gdy użytkownik przestawał dotykać ekran
+    /// </summary>
+    private void FinishConnection()
     {
 
         ConnectedBlocks
@@ -73,7 +86,11 @@ public class BlockConnection : MonoBehaviour {
         CurrentColor = null;
 		RefreshConnector();
     }
-	private void RefreshConnector() //funkcja odświażająca konektor, czyli wizualnie reprezentowała połączone elementy gry
+    /// <summary>
+    /// funkcja odświażająca konektor, czyli wizualnie reprezentowała połączone elementy gry
+    /// </summary>
+
+    private void RefreshConnector() 
 	{
 		var points = ConnectedBlocks
 			.Select(block => Board.GetBlockPosition(block.X, block.Y))
